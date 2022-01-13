@@ -11,6 +11,7 @@ function App() {
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined >(undefined);
   const [editMode, setEditMode] = useState(false);
 
+
   useEffect(() => {
     axios.get<Activity[]>('http://localhost:5000/api/activities').then(resopnse => {
       setActivities(resopnse.data);
@@ -44,6 +45,12 @@ function App() {
     setEditMode(false);
     setSelectedActivity(activity);
   }
+
+  function handleDeleteActivity(id: string)
+{
+  setActivities([...activities.filter(x => x.id !== id)])
+}
+
   return (
     <Fragment >
       <NavBar openForm={handleFormOpen} />
@@ -57,6 +64,7 @@ function App() {
           openForm={handleFormOpen}
           closeForm={handleFormClose}
           createOrEdit={handleCreateOrEditActivity}
+          deleteActivity={handleDeleteActivity}
         />
       </Container>
 

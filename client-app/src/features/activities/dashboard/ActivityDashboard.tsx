@@ -14,13 +14,13 @@ interface Props{
     openForm: (id: string) => void;
     closeForm: () => void;
     createOrEdit: (activity: Activity) => void;
-
+    deleteActivity: (id: string) => void;
 }
-export default function ActivityDashboard({activities,selectedActivity, selectActivity,  cancelSelectActivity, editMode, openForm, closeForm, createOrEdit} : Props) { // Destructures Activities from Props
+export default function ActivityDashboard({activities,selectedActivity, selectActivity,  cancelSelectActivity, editMode, openForm, closeForm, createOrEdit, deleteActivity} : Props) { // Destructures Activities from Props
     return(
         <Grid>
             <Grid.Column width='10'>
-                <ActivityList activities={activities} selectActivity={selectActivity} />
+                <ActivityList activities={activities} selectActivity={selectActivity} deleteActivity={deleteActivity} />
             </Grid.Column>
             <Grid.Column width='6'>
                 {selectedActivity  && !editMode && //Anything to the right of && will only execute of the left element isn't null
