@@ -15,10 +15,9 @@ export default observer( function ActivityDashboard() {
         {
             activityStore.loadActivities();
         }
-    }, [activityRegistry.size, loadActivities])
+    }, [activityStore, activityRegistry.size, loadActivities])
   
     if(activityStore.loadingInitial) return <LoadingComponent content='Loading app' />
-    const {selectedActivity, editMode} = activityStore;
     return (
         <Grid>
             <Grid.Column width="10">
