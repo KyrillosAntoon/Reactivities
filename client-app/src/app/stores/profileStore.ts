@@ -8,6 +8,8 @@ export default class ProfileStore {
     loadingProfile = false;
     uploading = false;
     loading = false;
+    Followings: Profile[] = [];
+    loadingFollowings = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -91,6 +93,48 @@ export default class ProfileStore {
         } catch (error) {
             runInAction(() => this.loading = false);
             console.log(error);
+        }
+    }
+
+    updateFollowing = async (username: string, following: boolean) =>
+    {
+        this.loading = true;
+        try {
+            await agent.Profiles.updateFollowing(username);
+            store.activityStore.updateAttendeeFollowing(username);
+            runInAction(() => {
+                if (this.profile && this.profile.username !== store.userStore.user?.username)
+                {
+                    following ? this.profile.followersCount++ : this.profile.followersCount--;
+                    this.profile.following = !this.profile.following;
+                }
+                this.Followings.forEach(profile => {
+                    if(profile.username === username)
+                    {
+                        profile.following ? profile.followersCount-- : profile.followersCount++;
+                        profile.following = !profile.following;
+                    }
+                })
+                this.loading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => this.loading = false);
+        }
+    }
+
+    loadFollowings = async (predicate: string) => {
+        this.loadingFollowings = true;
+        try {
+            const followings = await agent.Profiles.listFollwoings(this.profile!.username, predicate);
+            console.log(followings);
+            runInAction(() => {
+                this.Followings = followings;
+                this.loadingFollowings = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => this.loadingFollowings = false)
         }
     }
 }
