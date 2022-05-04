@@ -1,6 +1,6 @@
 namespace Application.Core
 {
-    public class PagingParmas
+    public class PagingParams
     {
         private const int MaxPageSize = 50;
 
